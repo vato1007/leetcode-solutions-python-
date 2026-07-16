@@ -1,0 +1,26 @@
+class Solution:
+    def numberOfSubmatrices(self, grid):
+        rows = len(grid)
+        cols = len(grid[0])
+
+        x_column = [0] * cols
+        y_column = [0] * cols
+        answer = 0
+
+        for r in range(rows):
+            x_total = 0
+            y_total = 0
+
+            for c in range(cols):
+                if grid[r][c] == 'X':
+                    x_column[c] += 1
+                elif grid[r][c] == 'Y':
+                    y_column[c] += 1
+
+                x_total += x_column[c]
+                y_total += y_column[c]
+
+                if x_total > 0 and x_total == y_total:
+                    answer += 1
+
+        return answer
