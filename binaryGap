@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int binaryGap(int n) {
+        int lastOne = -1;
+        int answer = 0;
+        int position = 0;
+
+        while (n > 0) {
+            if (n & 1) {
+                if (lastOne != -1) {
+                    answer = max(answer, position - lastOne);
+                }
+                lastOne = position;
+            }
+
+            n >>= 1;
+            position++;
+        }
+
+        return answer;
+    }
+};
