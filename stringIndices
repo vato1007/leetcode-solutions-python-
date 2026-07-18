@@ -1,0 +1,49 @@
+class TrieNode:
+    def __init__(self):
+        self.child = {}
+        self.idx = -1
+
+
+class Solution:
+    def stringIndices(self, wordsContainer, wordsQuery):
+        root = TrieNode()
+
+        # Best overall word (used when no suffix matches)
+        best = 0
+        for i in range(1, len(wordsContainer)):
+            if (len(wordsContainer[i]) < len(wordsContainer[best]) or
+                (len(wordsContainer[i]) == len(wordsContainer[best]) and i < best)):
+                best = i
+        root.idx = best
+
+        # Build trie
+        for i, word in enumerate(wordsContainer):
+            node = root
+
+            # Update root's best
+            if (len(word) < len(wordsContainer[node.idx]) or
+                (len(word) == len(wordsContainer[node.idx]) and i < node.idx)):
+                node.idx = i
+
+            for ch in word[::-1]:
+                if ch not in node.child:
+                    node.child[ch] = TrieNode()
+                node = node.child[ch]
+
+                if (node.idx == -1 or
+                    len(word) < len(wordsContainer[node.idx]) or
+                    (len(word) == len(wordsContainer[node.idx]) and i < node.idx)):
+                    node.idx = i
+
+        ans = []
+
+        # Process queries
+        for word in wordsQuery:
+            node = root
+            for ch in word[::-1]:
+                if ch not in node.child:
+                    break
+                node = node.child[ch]
+            ans.append(node.idx)
+
+        return ans
